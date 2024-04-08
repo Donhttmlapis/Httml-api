@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verificar BIN</title>
+</head>
+<body>
+    <h1>Verificar BIN</h1>
+    <form id="binForm">
+        <label for="binNumber">Número de BIN:</label>
+        <input type="text" id="binNumber" name="binNumber" required>
+        <button type="submit">Verificar</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById("binForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            var binNumber = document.getElementById("binNumber").value;
+            var apiUrl = "https://bins.antipublic.cc/bins/" + binNumber;
+
+            fetch(apiUrl)
+                .then(response => response.json())
+                .then(data => {
+                    var resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = "";
+                    resultDiv.innerHTML += "<h2>Resultados:</h2>";
+                    resultDiv.innerHTML += "<p>País: " + data.country_name + "</p>";
+                    resultDiv.innerHTML += "<p>Bandera: <img src='" + data.country_flag + "' alt='Bandera'></p>";
+                    resultDiv.innerHTML += "<p>Banco: " + data.bank + "</p>";
+                    resultDiv.innerHTML += "<p>Niveles: " + data.level + "</p>";
+                    resultDiv.innerHTML += "<p>Tipo: " + data.type + "</p>";
+                    resultDiv.innerHTML += "<p>Marca: " + data.brand + "</p>";
+                })
+                .catch(error => {
+                    var resultDiv = document.getElementById("result");
+                    resultDiv.innerHTML = "";
+                    resultDiv.innerHTML = "<p>Error al verificar el BIN.</p>";
+                });
+        });
+    </script>
+</body>
+</html>
